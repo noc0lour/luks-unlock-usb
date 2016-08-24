@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+
+if ! [ -e /passphrase-from-usb-tried-${CRYPTTAB_NAME} ]; then
+    touch /passphrase-from-usb-tried-${CRYPTTAB_NAME}
+    if ! [ -e "$CRYPTTAB_KEY" ]; then
+        echo "Waiting for USB stick to be recognized..." >&2
+        sleep 3
+    fi
+    if [ -e "$CRYPTTAB_KEY" ]; then
+        echo "Unlocking the disk $CRYPTTAB_SOURCE ($CRYPTTAB_NAME) from USB key" >&2
+        dd if="$CRYPTTAB_KEY" bs=1 skip=256 count=4096 2>/dev/null
+        exit
+    else
+        echo "Can't find $CRYPTTAB_KEY; USB stick not present?" >&2
+    fi
+fi
+
+/lib/cryptsetup/askpass "Unlocking the disk $CRYPTTAB_SOURCE ($CRYPTTAB_NAME)\nEnter passphrase: "

@@ -1,0 +1,2 @@
+# <target name>	<source device>		<key file>	<options>
+$disk_name	UUID=$disk_uuid /dev/disk/by-id/$usb-stick-id cipher=$your-cipher,hash=$your-hash,initramfs,keyscript=/lib/cryptsetup/scripts/01-usbkeyfile
